@@ -1,0 +1,26 @@
+{
+  "name": "@andrwj/fp",
+  "version": "0.0.0",
+  "description": "my own utility for Functional Programming",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo 'let me skip for a while' && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andrwj/FPJS.git"
+  },
+  "keywords": [
+    "FP",
+    "Functional Programming"
+  ],
+  "author": "A.J <andrwj@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andrwj/FPJS/issues"
+  },
+  "homepage": "https://github.com/andrwj/FPJS#readme",
+  "dependencies": {
+    "esm": "^3.2.22"
+  }
+}
