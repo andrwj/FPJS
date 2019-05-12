@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/andrwj/FPJS#readme",
   "dependencies": {
-    "esm": "^3.2.22"
+    "esm": "^3.2.22",
+    "ramda": "^0.26.1"
   }
 }
