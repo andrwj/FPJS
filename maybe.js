@@ -95,3 +95,4 @@ export class Nothing extends Maybe {
 }
 
 export const lift = R.curry((f, value)=> Maybe.fromNullable(value).map(f));
+
