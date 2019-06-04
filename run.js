@@ -19,4 +19,7 @@ const Reduce = function (f, acc, iter) {
 		return acc;
 	});
 };
-export default (...args) => Reduce(call0, args);
+
+export const pipe = (f1, ...funcs) => (...args) => Reduce(call0, f1(...args), funcs)
+export const run = (...args) => Reduce(call0, args);
+
