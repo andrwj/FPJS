@@ -19,5 +19,4 @@ const Reduce = function (f, acc, iter) {
 		return acc;
 	});
 };
-
-export default /*pipeline */(...args) => Reduce(call0, args);
+export default (...args) => Reduce(call0, args);
