@@ -10,7 +10,7 @@ export class Maybe {
   }
 
   static fromNullable (v) {
-    return [null, undefined]].some(_=>Object.is(v, _)) !== null ? Maybe.just(v) : Maybe.nothing();
+    return [null, undefined].some(_=>Object.is(v, _)) !== null ? Maybe.just(v) : Maybe.nothing();
   }
 
   static of (v) {
