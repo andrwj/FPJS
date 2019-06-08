@@ -22,7 +22,7 @@ class Fromise extends Promise {
      return this.then((value0) => f0(value0) ? if_true(value0) : if_false(value0));
   }
   
-  value () {
+  fold () {
     return this.then(([arg0]) => arg0);
   }
   
