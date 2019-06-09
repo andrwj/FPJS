@@ -12,7 +12,7 @@ const Reduce = function (f, acc, iter) {
 		while(!(el=iter.next()).done) {
 			acc = accumulate(acc, el.value, f);
 			if(acc instanceof Promise) {
-				return acc.then(recursively); 
+				return acc.then(recursively);
 			}
 		}
 		return acc;

@@ -1,6 +1,11 @@
-import * as R from 'ramda';
+import R from 'ramda';
 
 export class Maybe {
+
+  constructor(v) {
+    this._value = v;
+  }
+
   static just (v) {
     return new Just(v);
   }
@@ -10,7 +15,7 @@ export class Maybe {
   }
 
   static fromNullable (v) {
-    return [null, undefined].some(_=>Object.is(v, _)) !== null ? Maybe.just(v) : Maybe.nothing();
+    return [null, undefined].some(_=>Object.is(v, _)) ? Maybe.nothing(v) : Maybe.just(v);
   }
 
   static of (v) {
@@ -29,8 +34,7 @@ export class Maybe {
 
 export class Just extends Maybe {
   constructor (v) {
-    super();
-    this._value = value;
+    super(v);
   }
 
   get value () {
@@ -60,6 +64,10 @@ export class Just extends Maybe {
 }
 
 export class Nothing extends Maybe {
+  constructor(v) {
+    super(v);
+  }
+
   map(f) {
     return this;
   }
@@ -73,7 +81,7 @@ export class Nothing extends Maybe {
   }
 
   filter (f) {
-    return this._value;
+    return null;
   }
 
   chain (f) {
