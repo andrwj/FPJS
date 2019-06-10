@@ -33,6 +33,11 @@ export class Either {
     return (!isFalsy(v) && (v instanceof Either));
   }
 
+  tap(f) {
+    tryCatch(f, this.value);
+    return this;
+  }
+
   *[Symbol.iterator]() {
     yield this.value;
   }
