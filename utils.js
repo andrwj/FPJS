@@ -1,4 +1,4 @@
-import R from 'ramda';
+import * as R from 'ramda';
 
 export const isIterable = (arg0) => !!(arg0 instanceof Object && arg0[Symbol.iterator]);
 export const ternary = R.curry((f0, if_true, if_false, v) => f0(v) ? if_true(v) : if_false(v));

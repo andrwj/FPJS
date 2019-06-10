@@ -1,4 +1,4 @@
-import R from 'ramda';
+import * as R from 'ramda';
 import pipe from './pipe';
 import { Either } from './either';
 

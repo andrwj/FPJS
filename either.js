@@ -1,4 +1,4 @@
-import R from 'ramda';
+import * as R from 'ramda';
 import Fromise from './fromise';
 
 const isFalsy = v => [null, undefined].some(_=>Object.is(v, _));
