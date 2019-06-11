@@ -108,3 +108,7 @@ export const tryCatch = R.curry((f, v) => {
     return new Left(e);
   }
 });
+
+export const identity = v => v;
+export const revoke = () => undefined;
+export const truth = v => !!v;
