@@ -1,6 +1,6 @@
 import * as R from 'ramda';
 
-const isFalsy = v => [null, undefined].some(_=>Object.is(v, _));
+const isFalsy = v => [null, undefined, NaN].some(_=>Object.is(v, _));
 
 export class Either {
   constructor(args) {
