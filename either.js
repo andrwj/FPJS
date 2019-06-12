@@ -35,6 +35,9 @@ export class Either {
       }
     };
 
+    // eslint-disable-next-line no-use-before-define
+    this.try = curry(f => f(this.value) ? this.throw() : this);
+
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -55,26 +58,33 @@ export class Either {
   tap (f=console.log) {f(this.value); return this;}
 
   // eslint-disable-next-line no-use-before-define
-  throwIf (f) { return f(this.value) ? this.throw() : this;}
-
-  // eslint-disable-next-line no-use-before-define
   done () { return (this instanceof Done) ? this : Either.done( this ); }
 
   take () { return this.value; }
+
+  rightIf() {return this;}
+  leftIf() {return this;}
+  doneIf() {return this;}
+  chainIf() {return this;}
 };
+
 Either.of = R.curry((cond, v) =>  cond(v) ? Either.right(v) : Either.left(v));
-
-// eslint-disable-next-line no-use-before-define
 Either.right = R.curry(v => new Right(v));
-
-// eslint-disable-next-line no-use-before-define
 Either.left = R.curry(v => new Left(v));
-
-// eslint-disable-next-line no-use-before-define
 Either.done = R.curry(v => new Done(v));
-
+Either.throw = R.curry(v => new Throw(v));
 Either.fromNullable = R.curry(v => isFalsy(v) ? Either.left(v) : Either.right(v));
-
+Either.rightIf = R.curry((f, v) => f(v) ? Either.right(v) : Either.left(v));
+Either.leftIf = R.curry((f, v) => f(v) ? Either.left(v) : Either.right(v));
+Either.doneIf = R.curry((f, v) => f(v) ? Either.done(Either.right(v)) : Either.right(v));
+Either.throwIf = R.curry((f, v) => f(v) ? Either.throw(Either.right(v)) : Either.right(v));
+Either.try = R.curry(f => {
+  try {
+    return Either.right(f());
+  } catch(e) {
+    return Either.throw(e);
+  }
+});
 
 // //////////////////
 // Class Right
@@ -133,7 +143,7 @@ class Throw extends Either {
 
   throwIf() { return this;}
 
-  take () { return this; }
+  take () {throw new Error(this.value);}
 }
 
 // class Done
