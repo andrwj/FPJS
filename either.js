@@ -16,12 +16,11 @@ export class Either {
     }
     this.value = args;
 
-    this.try = curry(f => f(this.value) ? this.throw() : this).bind(this);
-    this.throw = v => Either.throw(v||this.value);
+    this.try = curry(f => f(this.value) ? Either.throw(this.value) : this).bind(this);
+    this.throw = () => Either.throw(this.value);
     this.catch = (handler=identity) => {
       if(!(this instanceof Throw)) return this;
       if(!isFunction(handler)) throw new Error(this.value);
-
       try {
         return Either.fromNullable(handler(this.value));
       } catch(e) {
@@ -164,4 +163,3 @@ class Done extends Either {
     })(this);
   }
 }
-
