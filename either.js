@@ -1,103 +1,173 @@
 import * as R from 'ramda';
+import isFunction from './isFunction';
+import isFalsy from './isFalsy';
 
-const isFalsy = v => [null, undefined, NaN].some(_=>Object.is(v, _));
+export const identity = v => v;
 
+export const revoke = () => undefined;
+
+export const truth = v => !!v;
+
+// TODO: .bind(this)
 export class Either {
   constructor(args) {
     if(!new.target || new.target === Either) {
       throw new Error(`no instanciation allowed for Abstract Class 'Either'`);
     }
     this.value = args;
-  }
 
-  static right(v) {
     // eslint-disable-next-line no-use-before-define
-    return new Right(v);
-  }
+    this.throw = v => Throw.create(v||this.value);
 
-  static left(v) {
-    // eslint-disable-next-line no-use-before-define
-    return new Left(v);
-  }
+    this.catch = (handler=identity) => {
+      // eslint-disable-next-line no-use-before-define
+      if(!(this instanceof Throw)) return this;
 
-  static fromNullable (v) {
-    return isFalsy(v) ? Either.left(v) : Either.right(v);
+      // When Throw object meet '.catch()', Must throw 'this.value' IF no functional given.
+      if(!isFunction(handler)) throw new Error(this.value);
+
+      try {
+        return Either.fromNullable(handler(this.value));
+      } catch(e) {
+        // if we meet exception inside .catch() we have to pass next catch
+        // eslint-disable-next-line no-use-before-define
+        return Throw.create(e);
+      }
+    };
+
   }
 
   // eslint-disable-next-line class-methods-use-this
-  inspect () {
-    return `Either implementation`;
-  }
+  inspect () {return `class Either`;}
 
-  static is(v) {
-    return (!isFalsy(v) && (v instanceof Either));
-  }
+  map () {return this;}
 
-  tap(f) {
-    tryCatch(f, this.value);
-    return this;
-  }
+  chain () {return this;}
 
-  *[Symbol.iterator]() {
-    yield this.value;
-  }
+  filter() {return this;}
+
+  static is(v) {return (!isFalsy(v) && (v instanceof Either));}
+
+  *[Symbol.iterator]() {yield this.value;}
+
+  fold () {return this.value;}
+
+  tap (f=console.log) {f(this.value); return this;}
+
+  // eslint-disable-next-line no-use-before-define
+  throwIf (f) { return f(this.value) ? this.throw() : this;}
+
+  // eslint-disable-next-line no-use-before-define
+  done () { return (this instanceof Done) ? this : Either.done( this ); }
+
+  take () { return this.value; }
 };
 Either.of = R.curry((cond, v) =>  cond(v) ? Either.right(v) : Either.left(v));
 
+// eslint-disable-next-line no-use-before-define
+Either.right = R.curry(v => new Right(v));
 
+// eslint-disable-next-line no-use-before-define
+Either.left = R.curry(v => new Left(v));
+
+// eslint-disable-next-line no-use-before-define
+Either.done = R.curry(v => new Done(v));
+
+Either.fromNullable = R.curry(v => isFalsy(v) ? Either.left(v) : Either.right(v));
+
+
+// //////////////////
+// Class Right
+// //////////////////
 class Right extends Either {
 
-  // eslint-disable-next-line no-useless-constructor
   constructor(args) {
     super(args);
+
+    this.map = R.curry((f) => {return new this.constructor(f(this.value));});
+
+    this.filter = R.curry(f => Either.of(f, this.value));
+
   }
 
-  map (f) {
-    return new this.constructor(f(this.value));
-  }
+  fold (no_use, f=identity) {return f(this.value);}
 
-  fold (_, right_f) {
-    return right_f(this.value);
-  }
+  chain (f=Either.right) {return f(this.value);}
 
-  chain (f) {
-    return f(this.value);
-  }
-
-  filter(f) {
-    return Either.of(f, this.value);
-  }
-
-  inspect() {
-    return `Right(${JSON.stringify(this.value)})`;
-  }
+  inspect() {return `Right(${JSON.stringify(this.value)})`;}
 }
 
+// Class Left
 class Left extends Either {
 
   // eslint-disable-next-line no-useless-constructor
+  constructor(args) {super(args);}
+
+  fold (f=identity) {return f(this.value);}
+
+  inspect () {return `Left(${JSON.stringify(this.value)})`;}
+}
+
+// class Throw
+class Throw extends Either {
+
+  // eslint-disable-next-line no-useless-constructor
   constructor(args) {
     super(args);
+
+    this.throw = () => this;
   }
 
-  map () {
-    return new this.constructor(this.value);
+  // To make stack trace, use try-catch
+  static create(v) {
+    try {
+      throw new Throw(v);
+    } catch(th) {
+      return th;
+    }
   }
 
-  fold (left_f, _) {
-    return left_f(this.value);
+  fold () {throw new Error(this.value);}
+
+  inspect() {return `Throw(${JSON.stringify(this.value)})`;}
+
+  throwIf() { return this;}
+
+  take () { return this; }
+}
+
+// class Done
+class Done extends Either {
+
+  // eslint-disable-next-line no-useless-constructor
+  constructor(args) {
+    if(!(args instanceof Either)) throw new Error(`argument must be of Either`);
+    super(args);
+
+    this.throw = () => this;
+    this.cath = () => this;
   }
 
-  chain () {
-    return this;
+  throwIf() { return this;}
+
+  fold (f=identity, g=identity) {
+    return (function recur(obj) {
+      return (obj && (obj instanceof Either) && (obj.value instanceof Either)) ? recur(obj.value) : obj.fold(f, g);
+    })(this);
   }
 
-  filter () {
-    return this;
+  inspect() {
+    return (function recur(obj) {
+      return (obj instanceof Either) ? `${obj.constructor.name}(${recur(obj.value)})` : `${obj}`;
+    })(this);
   }
 
-  inspect () {
-    return `Left(${JSON.stringify(this.value)})`;
+  // Done 객체는 오직 take() 메소드에 의해서만 처리된다
+  // 아무리 중첩된 객체라고 해도, 원래의 값을 리턴하게 한다
+  take () {
+    return (function recur(obj) {
+      return (obj && (obj instanceof Either) && (obj.value instanceof Either)) ? recur(obj.value) : obj.value;
+    })(this);
   }
 }
 
@@ -108,7 +178,3 @@ export const tryCatch = R.curry((f, v) => {
     return new Left(e);
   }
 });
-
-export const identity = v => v;
-export const revoke = () => undefined;
-export const truth = v => !!v;
