@@ -24,19 +24,24 @@ export class Either {
 
   inspect (f) {const _inspect=`${this.constructor.name}(${this.value})`; return isFunction(f) ? f(_inspect) : _inspect;}
 
+  *[Symbol.iterator]() {yield this.value;}
+
+  tap (f=console.log) {f(this.value); return this;}
+
+  take (f) {
+    if(isFunction(f)) try { f(this.value); } catch(e) {};
+    return this.value;
+  }
+
+  clone () { return Object.create(this.value);}
+
   map () {return this;}
 
   chain () {return this;}
 
   filter() {return this;}
 
-  *[Symbol.iterator]() {yield this.value;}
-
   fold () {return this;}
-
-  tap (f=console.log) {f(this.value); return this;}
-
-  take () { return this.value; }
 
   done () {return this;}
 
@@ -46,25 +51,25 @@ export class Either {
 };
 
 Either.of = R.curry((cond, v) =>  cond(v) ? Either.right(v) : Either.left(v));
-Either.filter = (f) => {
+Either.filter = (f, cond=truth) => {
   const v = f();
-  return v ? Either.right(v) : Either.left(v);
+  return cond(v) ? Either.right(v) : Either.left(v);
 };
 Either.right = R.curry(v => new Right(v));
 Either.left = R.curry(v => new Left(v));
 Either.done = (o) => {
   if(o instanceof Either) return new Done(o);
-  throw new Error(`Either.done() needs instance of Either class`);
-}
-Either.throw = (v) => new Throw(v); // 절대 직접 호출하지 말 것
+  throw new Error(`Either.done() needs instance of Either`);
+};
+Either.throw = (v) => new Throw(v);
 Either.excepsion = (v) => new Excepsion(v);
 Either.fromNullable = (v) => isFalsy(v) ? Either.left(v) : Either.right(v);
 Either.rightIf = R.curry((f, v) => f(v) ? Either.right(v) : Either.left(v));
 Either.leftIf = R.curry((f, v) => f(v) ? Either.left(v) : Either.right(v));
 Either.doneIf = R.curry((f, v) => f(v) ? Either.done(Either.right(v)) : Either.right(v));
 Either.throwIf = R.curry((f, v) => f(v) ? Either.throw(Either.right(v)) : Either.right(v));
-Either.try = (f) => {
-  try {return Either.right(f());} catch(e) {return Either.excepsion(e);}
+Either.try = (f, cond=truth) => {
+  try {return Either.of(cond, f());} catch(e) {return Either.excepsion(e);}
 };
 
 // //////////////////
@@ -103,7 +108,6 @@ class Left extends Either {
   constructor(args) {
     super(args);
 
-    this.throw = () => this;
   }
 
   fold (f=identity) {return f(this.value);}
@@ -113,13 +117,11 @@ class Left extends Either {
   doneIf (f) {return f(this.value) ? Either.done(this) : this;}
 }
 
-// class Throw.
 class Throw extends Either {
   constructor(args) {
+    if(!(args instanceof Either)) throw new Error(`Throw() needs instance of Either`);
     super(args);
 
-    this.try = () => this;
-    this.throw = () => this;
     this.catch = (handler=identity, cond=truth) => {
       if(!isFunction(handler))  return this;
       try {
@@ -130,11 +132,8 @@ class Throw extends Either {
     };
 
   }
-
-  throwIf() { return this;}
 }
 
-// class Excepsion
 class Excepsion extends Either {
   constructor(args) {
     super(args);
@@ -151,13 +150,13 @@ class Excepsion extends Either {
 
   }
 
-  take  () {throw new Error(this.value);}
+  take  (f) {
+    if(isFunction(f)) try { f(this.value); } catch(e) { };
+    throw new Error(this.value);}
 }
 
-// class Done
 class Done extends Either {
 
-  // eslint-disable-next-line no-useless-constructor
   constructor(args) {
     if(!(args instanceof Either)) throw new Error(`argument must be of Either`);
     super(args);
