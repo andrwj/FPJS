@@ -73,7 +73,9 @@ Either.rightIf = R.curry((f, v) => f(v) ? Either.right(v) : Either.left(v));
 Either.leftIf = R.curry((f, v) => f(v) ? Either.left(v) : Either.right(v));
 Either.doneIf = R.curry((f, v) => f(v) ? Either.done(Either.right(v)) : Either.right(v));
 Either.throwIf = R.curry((f, v) => f(v) ? Either.throw(Either.right(v)) : Either.right(v));
-Either.try = R.curry(f => {try {return Either.right(f());} catch(e) {return Either.throw(e);}});
+Either.try = (f) => {
+  try {return Either.right(f());} catch(e) {return Either.throw(e);}
+};
 
 // //////////////////
 // Class Right

@@ -1,6 +1,6 @@
 {
   "name": "@andrwj/fp",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "my own utility for Functional Programming",
   "main": "index.js",
   "scripts": {
