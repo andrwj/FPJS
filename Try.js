@@ -1,11 +1,11 @@
 import * as R from 'ramda';
-import {Either} from './either';
+import {Either, truth} from './either';
 
-export default R.curry(f => {
+export default R.curry((f, cond=truth)  => {
   try {
-    return Either.right(f());
+    return Either.of(cond, f());
   } catch(e) {
-    return Either.throw(e);
+    return Either.excepsion(e);
   }
 });
 
