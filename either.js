@@ -16,7 +16,7 @@ export class Either {
     }
     this.value = args;
 
-    this.try = curry(f => f(this.value) ? Either.throw(this.value) : this).bind(this);
+    this.try = R.curry(f => f(this.value) ? Either.throw(this.value) : this).bind(this);
     this.throw = () => Either.throw(this.value);
     this.catch = (handler=identity) => {
       if(!(this instanceof Throw)) return this;
@@ -50,18 +50,23 @@ export class Either {
 
   take () { return this.value; }
 
-  rightIf() {return this;}
-
-  leftIf() {return this;}
+  throwIf (f) { return f(this.value) ? Either.throw(Either.right(this.value)) : Either.right(this.value); }
 
   doneIf() {return this;}
 
 };
 
 Either.of = R.curry((cond, v) =>  cond(v) ? Either.right(v) : Either.left(v));
+Either.filter = (f) => {
+  const v = f();
+  return v ? Either.right(v) : Either.left(v);
+};
 Either.right = R.curry(v => new Right(v));
 Either.left = R.curry(v => new Left(v));
-Either.done = R.curry(v => new Done(v));
+Either.done = (o) => {
+  if(o instanceof Either) return new Done(o);
+  throw new Error(`Either.done() needs instance of Either class`);
+}
 Either.throw = R.curry(v => new Throw(v));
 Either.fromNullable = R.curry(v => isFalsy(v) ? Either.left(v) : Either.right(v));
 Either.rightIf = R.curry((f, v) => f(v) ? Either.right(v) : Either.left(v));
@@ -88,9 +93,7 @@ class Right extends Either {
 
   chain (f) {return f(this.value);}
 
-  leftIf (f) {return f(this.value) ? Either.left(this.value) : this;}
-
-  doneIf (f) {return f(this.value) ? Either.done(this.value) : this;}
+  doneIf (f) {return f(this.value) ? Either.done(this) : this;}
 
 }
 
@@ -103,10 +106,6 @@ class Left extends Either {
   }
 
   fold (f=identity) {return f(this.value);}
-
-  rightIf (f) {return f(this.value) ? Either.right(this.value) : this;}
-
-  doneIf (f) {return f(this.value) ? Either.done(this.value) : this;}
 }
 
 // class Throw
@@ -141,6 +140,13 @@ class Done extends Either {
   }
 
   throwIf() { return this;}
+
+  tap (f=console.log) {
+    (function recur(obj) {
+      return (obj && (obj instanceof Either) && (obj.value instanceof Either)) ? recur(obj.value) : f(obj.value);
+    })(this);
+    return this;
+  }
 
   fold (f=identity, g=identity) {
     return (function recur(obj) {
