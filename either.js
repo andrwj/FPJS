@@ -82,7 +82,7 @@ class Right extends Either {
 
   filter (f) { return Either.of(f, this.value);}
 
-  fold (no_use, f=identity) {return f(this.value);}
+  fold (f=identity, no_use) {return f(this.value);}
 
   done (v) { return Either.done(isUndefined(v) ? this.value : v); }
 
@@ -101,7 +101,7 @@ class Left extends Either {
 
   take () {return this.value;}
 
-  fold (f=identity) {return f(this.value);}
+  fold (no_use, f=identity) {return f(this.value);}
 }
 
 // 'Throw' is not Error nor Exception. It is carrier for the instance of Right to '.catch()'
@@ -130,7 +130,7 @@ class Throw extends Either {
     const _inspect = (function recur(obj) {
       return (obj instanceof Either) ? `${obj.constructor.name}(${recur(obj.value)})` : `${obj}`;
     })(this);
-    Either.of(isFunction, f).fold(() => console.log(_inspect), () => f(_inspect));
+    Either.of(isFunction, f).fold(() => f(_inspect), () => console.log(_inspect));
     return this;
   }
 
@@ -163,7 +163,7 @@ class Done extends Either {
     const _inspect = (function recur(obj) {
       return (obj instanceof Either) ? `${obj.constructor.name}(${recur(obj.value)})` : `${obj}`;
     })(this);
-    Either.of(isFunction, f).fold(() => console.log(_inspect), () => f(_inspect));
+    Either.of(isFunction, f).fold(() => f(_inspect), () => console.log(_inspect));
     return this;
   }
 
