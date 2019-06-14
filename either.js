@@ -1,13 +1,11 @@
 import * as R from 'ramda';
 import isFunction from './isFunction';
-import isFalsy from './isFalsy';
 
 export const identity = v => v;
 export const revoke = () => undefined;
 export const truth = v => !!v;
 export const isUndefined = v => Object.is(v, undefined);
 
-// TODO: .bind(thiisUndefined(v) ? s)
 export class Either {
   constructor(args) {
     if(!new.target || new.target === Either) {
@@ -22,7 +20,7 @@ export class Either {
 
   inspect (f) {
     const _inspect=`${this.constructor.name}(${this.value})`;
-    isFunction(f) ? f(_inspect) : console.log(_inspect);
+    Either.of(isFunction, f).fold(() => f(_inspect), () => console.log(_inspect));
     return this;
   }
 

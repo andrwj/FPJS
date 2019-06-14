@@ -1,5 +1,3 @@
-import * as R from 'ramda';
-
 export { curry, map, filter, partial } from 'ramda';
 export { default as reduce } from './reduce';
 export { default as run } from './run';
