@@ -5,7 +5,7 @@ import isFalsy from './isFalsy';
 export const identity = v => v;
 export const revoke = () => undefined;
 export const truth = v => !!v;
-export const isUndefined = v => isUndefined(v);
+export const isUndefined = v => Object.is(v, undefined);
 
 // TODO: .bind(thiisUndefined(v) ? s)
 export class Either {
@@ -20,7 +20,11 @@ export class Either {
     this.clone = () => this;
   }
 
-  inspect (f) {const _inspect=`${this.constructor.name}(${this.value})`; return isFunction(f) ? f(_inspect) : _inspect;}
+  inspect (f) {
+    const _inspect=`${this.constructor.name}(${this.value})`;
+    isFunction(f) ? f(_inspect) : console.log(_inspect);
+    return this;
+  }
 
   *[Symbol.iterator]() {yield this.value;}
 
@@ -44,7 +48,7 @@ export class Either {
 };
 
 Either.of = R.curry((cond, v) =>  cond(v) ? Either.right(v) : Either.left(v));
-Either.fromNullable = v => Either.of(isFalsy, v);
+Either.fromNullable = v => Either.of(truth, v);
 Either.filter = (f, cond=truth) => {
   const v = f();
   return cond(v) ? Either.right(v) : Either.left(v);
@@ -52,7 +56,11 @@ Either.filter = (f, cond=truth) => {
 Either.right = R.curry(v => new Right(v));
 Either.left = R.curry(v => new Left(v));
 Either.done = v => new Done(Either.right(v));
+Either.doneIf = (f, v) => {return f(v) ? Either.done(v) : Either.right(v); };
 Either.throw = v => new Throw(Either.right(v));
+Either.try = (f)  => {
+  try {return Either.right(f());} catch(e) {return Either.left(e);}
+};
 
 
 class Right extends Either {
@@ -108,6 +116,22 @@ class Throw extends Either {
       if(!isFunction(handler))  return this;
       return Either.of(truth, handler(this.value.take()));
     };
+
+  }
+
+  tap (f=console.log) {
+    (function recur(obj) {
+      return (obj && (obj instanceof Either) && (obj.value instanceof Either)) ? recur(obj.value) : f(obj.value);
+    })(this);
+    return this;
+  }
+
+  inspect (f) {
+    const _inspect = (function recur(obj) {
+      return (obj instanceof Either) ? `${obj.constructor.name}(${recur(obj.value)})` : `${obj}`;
+    })(this);
+    Either.of(isFunction, f).fold(() => console.log(_inspect), () => f(_inspect));
+    return this;
   }
 
 }
@@ -135,11 +159,12 @@ class Done extends Either {
     })(this);
   }
 
-  inspect(f) {
+  inspect (f) {
     const _inspect = (function recur(obj) {
       return (obj instanceof Either) ? `${obj.constructor.name}(${recur(obj.value)})` : `${obj}`;
     })(this);
-    return isFunction(f) ? f(_inspect) : _inspect;
+    Either.of(isFunction, f).fold(() => console.log(_inspect), () => f(_inspect));
+    return this;
   }
 
   take () {

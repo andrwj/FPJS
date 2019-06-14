@@ -3,9 +3,8 @@ import {Either, truth} from './either';
 
 export default R.curry((f, cond=truth)  => {
   try {
-    return Either.of(cond, f());
+    return Either.right(f());
   } catch(e) {
-    return Either.excepsion(e);
+    return Either.left(e);
   }
 });
-
