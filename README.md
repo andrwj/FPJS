@@ -9,27 +9,26 @@
 `npm install @andrwj/fp`
 
 
-
 ## 사용
 
 
 ### Either
-
+  * map(f)
+  * chain(f)
+  * tap(f)
+  * filter(f)
+  * clone(v)
+  * take(f)
+  * fold(f, g)
+  * done(f)
+  * doneIf(f)
+  * throwIf(f)
+  * inspect(f)
+  * tap(f)
 
 ### Fromise (Promimse + Either)
 
 
-### Try
-
-
 ### run
-
-
 ### pipe
-
-
 ### Utilities
-
-
-
-
