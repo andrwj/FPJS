@@ -1,15 +1,16 @@
 ## FPJS
 
-함수형 프로그래밍을 학습하기 위한 짜집기된 유틸리티 패키지.
+A simple package for learning functional programming.
+
+Introduce in [Medium post](https://medium.com/@andrwj/either-implementation-that-is-throwable-and-catchable-5b0015f4b6e3)
 
 
-
-## 설치
+## Installation
 
 `npm install @andrwj/fp`
 
 
-## 사용
+## Usage (Not fully documented yet)
 
 
 ### Either
@@ -22,12 +23,12 @@
   * fold(f, g)
   * done(f)
   * doneIf(f)
+  * try()
   * throwIf(f)
   * inspect(f)
   * tap(f)
 
 ### Fromise (Promimse + Either)
-
 
 ### run
 ### pipe
