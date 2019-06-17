@@ -68,7 +68,9 @@ class Right extends Either {
 
     this.throw = () => Either.throw(this.value);
     this.clone = v => Either.right(isUndefined(v) ? this.value : v);
-
+    this.try = (f)  => {
+      try {return Either.right(f(this.value));} catch(e) {return Either.left(e);}
+    };
   }
 
 
