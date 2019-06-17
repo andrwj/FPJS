@@ -13,6 +13,7 @@ export class Either {
     }
     this.value = args;
 
+    this.try = () => this;
     this.throw = () => this;
     this.catch = () => this;
     this.clone = () => this;
