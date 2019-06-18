@@ -8,7 +8,7 @@ export const isUndefined = v => Object.is(v, undefined);
 
 export class Either {
   constructor(args) {
-    if(!new['target'] || new['target'] === Either) {
+    if(!new.target || new.target === Either) {
       throw new Error(`no instanciation allowed for Abstract Class 'Either'`);
     }
     this.value = args;
