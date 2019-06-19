@@ -57,6 +57,7 @@ Either.left = R.curry(v => new Left(v));
 Either.done = v => new Done(Either.right(v));
 Either.doneIf = (f, v) => {return f(v) ? Either.done(v) : Either.right(v); };
 Either.throw = v => new Throw(Either.right(v));
+Either.throwIf = (f, v) => f(v) ? new Throw(Either.right(v)) : Either.right(v);
 Either.try = (f)  => {
   try {return Either.right(f());} catch(e) {return Either.left(e);}
 };

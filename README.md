@@ -28,6 +28,9 @@ Introduce in [Medium post](https://medium.com/@andrwj/either-implementation-that
   * inspect(f)
   * tap(f)
 
+### 주의사항
+	* `done()`을 쓰면 반드시 어딘가에 `take()` 혹은 `fold()`를 써야 한다
+
 ### Fromise (Promimse + Either)
 
 ### run
