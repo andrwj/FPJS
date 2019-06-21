@@ -12,11 +12,6 @@ export class Either {
       throw new Error(`no instanciation allowed for Abstract Class 'Either'`);
     }
     this.value = args;
-
-    this.try = () => this;
-    this.throw = () => this;
-    this.catch = () => this;
-    this.clone = () => this;
   }
 
   inspect (f) {
@@ -26,6 +21,14 @@ export class Either {
   }
 
   *[Symbol.iterator]() {yield this.value;}
+
+  ['try'] () {return this;}
+
+  ['throw'] () {return this;}
+
+  ['catch'] () {return this;}
+
+  ['clone'] () {return this;}
 
   tap (f=console.log) {f(this.value); return this;}
 
@@ -68,13 +71,13 @@ class Right extends Either {
   constructor(args) {
     super(args);
 
-    this.throw = () => Either.throw(this.value);
-    this.clone = v => Either.right(isUndefined(v) ? this.value : v);
-    this.try = (f)  => {
-      try {return Either.right(f(this.value));} catch(e) {return Either.left(e);}
-    };
   }
 
+  ['try'] (f) { try {return Either.right(f(this.value));} catch(e) {return Either.left(e);} }
+
+  ['throw'] () {return Either.throw(this.value);}
+
+  ['clone'] (v) {return Either.right(isUndefined(v) ? this.value : v);}
 
   take () {return this.value;}
 
@@ -114,11 +117,11 @@ class Throw extends Either {
     if(!(args instanceof Either)) throw new Error(`Throw() needs instance of Either`);
     super(args);
 
-    this.catch = (handler=identity, cond=truth) => {
-      if(!isFunction(handler))  return this;
-      return Either.of(truth, handler(this.value.take()));
-    };
+  }
 
+  ['catch'] (handler=identity, cond=truth) {
+    if(!isFunction(handler))  return this;
+    return Either.of(truth, handler(this.value.take()));
   }
 
   tap (f=console.log) {
