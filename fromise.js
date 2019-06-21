@@ -3,13 +3,9 @@ import pipe from './pipe';
 import { Either } from './either';
 
 class Fromise extends Promise {
-  //eslint-disable-next-line no-useless-constructor
-  constructor(...args) {
-    super(...args);
-  }
 
   static resolve(arg0) {
-    return new Fromise(resolv => resolv(arg0));
+    return new Fromise(resolve => resolve(arg0));
   }
 
   static reject(arg0) {
@@ -24,20 +20,20 @@ class Fromise extends Promise {
     return this.then(arg0 => pipe(...funcs)(arg0));
   }
 
-  ['if'](f0, if_true, if_false) {
-    return this.then(value0 => (f0(value0) ? if_true(value0) : if_false(value0)));
+  ['if'](f, if_true, if_false) {
+    return this.then(value0 => (f(value0) ? if_true(value0) : if_false(value0)));
   }
 
-  log (f0) {
-    return this.then(value0 => f0 ? R.tap(f0(value0)) : R.tap(console.log(value0)));
+  tap (f=console.log) {
+    return this.then(value0 => R.tap(f(value0)));
   }
 
-  either (f0) {
-    return this.then( v0 => Either.is(v0) ? Either.of(f0, v0.chain(R.identity)) : Either.of(f0, v0) );
+  either (f) {
+    return this.then( value => Either.of(f, value) );
   }
 
-  map (f0) {
-    return this.then( v0 => Either.is(v0) ? v0.map(f0) : Either.of(f0, v0));
+  map (f) {
+    return this.then( v0 => Either.is(v0) ? v0.map(f) : Either.of(f, v0));
   }
 
   fold (f, g) {
