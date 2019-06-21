@@ -1,10 +1,10 @@
 
-export const Any = (x) => ({x, concat: ({x: y})=>Any(x || y)}); Any.empty = () => Any(false);
-export const All = (x) => ({x, concat: ({x: y})=>Any(x && y)}); All.empty = () => All(true);
-export const Max = (x) => ({x, concat: ({x: y})=>Max(x>y ? x: y)}); Max.empty = () => Max(-Infinity);
-export const Min = (x) => ({x, concat: ({x: y})=>Min(x<y ? x: y)}); Min.empty = () => Min(Infinity);
-export const Sum = (x) => ({x, concat: ({x: y})=>Sum(x+y)}); Sum.empty = () => Sum(0);
-export const Product = (x) => ({x, concat: ({x: y})=>Sum(x*y)}); Product.empty = () => Product(1);
+export const Any = x => ({x, concat: ({x: y})=>Any(x || y)}); Any.empty = () => Any(false);
+export const All = x => ({x, concat: ({x: y})=>Any(x && y)}); All.empty = () => All(true);
+export const Max = x => ({x, concat: ({x: y})=>Max(x>y ? x: y)}); Max.empty = () => Max(-Infinity);
+export const Min = x => ({x, concat: ({x: y})=>Min(x<y ? x: y)}); Min.empty = () => Min(Infinity);
+export const Sum = x => ({x, concat: ({x: y})=>Sum(x+y)}); Sum.empty = () => Sum(0);
+export const Product = x => ({x, concat: ({x: y})=>Sum(x*y)}); Product.empty = () => Product(1);
 // export Right = (x) =>
 //   ({
 //     map: (f) => Right(f(x)),

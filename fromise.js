@@ -3,16 +3,17 @@ import pipe from './pipe';
 import { Either } from './either';
 
 class Fromise extends Promise {
+  //eslint-disable-next-line no-useless-constructor
   constructor(...args) {
     super(...args);
   }
 
   static resolve(arg0) {
-    return new Fromise((resolv, reject)=> resolv(arg0));
+    return new Fromise(resolv => resolv(arg0));
   }
 
   static reject(arg0) {
-    return new Fromise((resolv, reject)=> reject(arg0));
+    return new Fromise((_, reject)=> reject(arg0));
   }
 
   static isPromise (v) {
@@ -20,11 +21,11 @@ class Fromise extends Promise {
   }
 
   pipe (...funcs) {
-    return this.then((arg0) => pipe(...funcs)(arg0));
+    return this.then(arg0 => pipe(...funcs)(arg0));
   }
 
-  if(f0, if_true, if_false) {
-    return this.then((value0) => f0(value0) ? if_true(value0) : if_false(value0));
+  ['if'](f0, if_true, if_false) {
+    return this.then(value0 => (f0(value0) ? if_true(value0) : if_false(value0)));
   }
 
   log (f0) {
