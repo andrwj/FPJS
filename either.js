@@ -53,7 +53,7 @@ export class Either {
   throwIf () { return this; }
 };
 
-Either.of = R.curry((v, f) =>  isFunction(f) ? (f(v) ? Either.right(v) : Either.left(v)) : Either.right(v));
+Either.of = (v, f) =>  isFunction(f) ? (f(v) ? Either.right(v) : Either.left(v)) : Either.right(v);
 Either.fromNullable = v => Either.of(v, truth);
 Either.filter = (f, cond=truth) => {
   const v = f();
