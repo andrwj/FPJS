@@ -18,9 +18,9 @@ Introduce in [Medium post](https://medium.com/@andrwj/either-implementation-that
 
 ## Either
 ### static methods
-* `Either.of(f, value)`
+* `Either.of(value, f)` - `f` is optional
 * `Either.fromNullable(value)`
-* `Either.filter(f, condition=truth)`
+* `Either.filter(f, condition_f=truth)` - `condition_f` is optional
 * `Either.right(value)`
 * `Either.left(value)`
 * `Either.done(value)`
@@ -42,6 +42,7 @@ Introduce in [Medium post](https://medium.com/@andrwj/either-implementation-that
   * `.done()`
   * `.doneIf(f)`
   * `.throwIf(f, value)`
+  * `.apply( instance_of_Either )`
 
 ### instance methods for Left
   * `.inspect(f)`
@@ -70,7 +71,19 @@ Introduce in [Medium post](https://medium.com/@andrwj/either-implementation-that
   * `.chain (f)`
 
 ## High Order Functions (Not fully documented yet)
- * run
- * pipe
+ * `run(v, f1, f2, f3, ... ) : value`
+ * `pipe(f1, f2, f3, ...) : function`
  
 ## Utilities (Not fully documented yet)
+ * `isFunction (v)` - return true if `v` is function
+ * `isFalsy (v)` - true if `v` is one of `undefined`, `NaN`, `null`
+ * `isFalse (v)` - true if `v` is one of `undefined`, `NaN`, `null`, `0`, `""`
+ * `identity (v)` - returns `v`, always.
+
+## Changes
+
+### `v0.2.0` (break changes to version of `0.1.*` )
+* changed arguments order and way: `Either.of(f, value)` ➡ `Either.of(value, f)` - if `f` is not given, it just returns `Right(value)`. Otherwise, it returns `Right(value)` or `Left(value)` depends on the boolean result of `f(value)`
+* changed arguments: `.catch(f, condition_f)` ➡ `.catch(f)` - if `f` is not given, it returns the instance of thrown from `.throw()`. Otherwise it returns `.map(f)`
+* added: `.of(value, f)` - same as `Either.of(value, f)`
+* added: `isNotFalsy(v) : boolean `

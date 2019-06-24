@@ -16,7 +16,7 @@ export class Either {
 
   inspect (f) {
     const _inspect=`${this.constructor.name}(${this.value})`;
-    Either.of(isFunction, f).fold(() => f(_inspect), () => console.log(_inspect));
+    Either.of(f, isFunction).fold(() => f(_inspect), () => console.log(_inspect));
     return this;
   }
 
@@ -33,6 +33,8 @@ export class Either {
   ['apply'] () {return this;}
 
   tap (f=console.log) {f(this.value); return this;}
+
+  of () {return this;}
 
   take () {return this;}
 
@@ -51,8 +53,8 @@ export class Either {
   throwIf () { return this; }
 };
 
-Either.of = R.curry((cond, v) =>  cond(v) ? Either.right(v) : Either.left(v));
-Either.fromNullable = v => Either.of(truth, v);
+Either.of = R.curry((v, f) =>  isFunction(f) ? (f(v) ? Either.right(v) : Either.left(v)) : Either.right(v));
+Either.fromNullable = v => Either.of(v, truth);
 Either.filter = (f, cond=truth) => {
   const v = f();
   return cond(v) ? Either.right(v) : Either.left(v);
@@ -83,13 +85,15 @@ class Right extends Either {
 
   ['apply'] (o) {return o.map(this.value);}
 
+  of (v, f) {return isFunction(f) ? (f(v) ? Either.right(v) : Either.left(v)) : Either.right(v);}
+
   take () {return this.value;}
 
   map (f) {return Either.right(f(this.value));}
 
   chain (f) {return f(this.value);}
 
-  filter (f) { return Either.of(f, this.value);}
+  filter (f) { return Either.of(this.value, f);}
 
   fold (f=identity, no_use) {return f(this.value);}
 
@@ -123,9 +127,8 @@ class Throw extends Either {
 
   }
 
-  ['catch'] (handler=identity, cond=truth) {
-    if(!isFunction(handler))  return this;
-    return Either.of(truth, handler(this.value.take()));
+  ['catch'] (handler) {
+    return isFunction(handler) ? this.value.map(handler) : this.value;
   }
 
   tap (f=console.log) {
@@ -139,7 +142,7 @@ class Throw extends Either {
     const _inspect = (function recur(obj) {
       return (obj instanceof Either) ? `${obj.constructor.name}(${recur(obj.value)})` : `${obj}`;
     })(this);
-    Either.of(isFunction, f).fold(() => f(_inspect), () => console.log(_inspect));
+    Either.of(f, isFunction).fold(() => f(_inspect), () => console.log(_inspect));
     return this;
   }
 
@@ -172,7 +175,7 @@ class Done extends Either {
     const _inspect = (function recur(obj) {
       return (obj instanceof Either) ? `${obj.constructor.name}(${recur(obj.value)})` : `${obj}`;
     })(this);
-    Either.of(isFunction, f).fold(() => f(_inspect), () => console.log(_inspect));
+    Either.of(f, isFunction).fold(() => f(_inspect), () => console.log(_inspect));
     return this;
   }
 

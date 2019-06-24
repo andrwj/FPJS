@@ -9,6 +9,6 @@ export { isIterable, ternary, sleep, mixin, attach } from './utils';
 export { default as Fromise } from './fromise';
 export { Any, All } from './semigroup';
 export { default as isFunction } from './isFunction';
-export { default as isFalsy } from './isFalsy';
+export { isFalsy, isNotFalsy } from './isFalsy';
 export { default as isFalse } from './isFalse';
 export { __true, __false } from './true-false';
