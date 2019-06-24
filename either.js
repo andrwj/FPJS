@@ -30,6 +30,8 @@ export class Either {
 
   ['clone'] () {return this;}
 
+  ['apply'] () {return this;}
+
   tap (f=console.log) {f(this.value); return this;}
 
   take () {return this;}
@@ -78,6 +80,8 @@ class Right extends Either {
   ['throw'] () {return Either.throw(this.value);}
 
   ['clone'] (v) {return Either.right(isUndefined(v) ? this.value : v);}
+
+  ['apply'] (o) {return o.map(this.value);}
 
   take () {return this.value;}
 
