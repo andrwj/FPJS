@@ -4,6 +4,7 @@
   "description": "my own utility for Functional Programming",
   "main": "index.js",
 	"module": "FP.js",
+  "type": "module",
   "scripts": {
     "test": "echo 'let me skip for a while' && exit 0"
   },
