@@ -1,8 +1,9 @@
 {
   "name": "@andrwj/fp",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "my own utility for Functional Programming",
   "main": "index.js",
+	"module": "FP.js",
   "scripts": {
     "test": "echo 'let me skip for a while' && exit 0"
   },
