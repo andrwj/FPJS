@@ -1,11 +1,11 @@
 {
   "name": "@andrwj/fp",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "my own utility for Functional Programming",
   "main": "index.js",
   "module": "FP.js",
   "scripts": {
-    "build": "npx babel --presets @babel/env ./*.js -d ./build"
+    "build": "npx babel --presets @babel/env --plugins @babel/plugin-transform-runtime ./*.js -d ./build"
   },
   "repository": {
     "type": "git",
@@ -22,12 +22,14 @@
   },
   "homepage": "https://github.com/andrwj/FPJS#readme",
   "dependencies": {
+    "@babel/runtime": "^7.4.5",
     "esm": "^3.2.25",
     "ramda": "^0.26.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",
     "@babel/core": "^7.4.5",
+    "@babel/plugin-transform-runtime": "^7.4.4",
     "@babel/preset-env": "^7.4.5"
   }
 }
