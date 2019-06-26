@@ -25,9 +25,9 @@ Introduce in [Medium post](https://medium.com/@andrwj/either-implementation-that
 * `Either.left(value)`
 * `Either.done(value)`
 * `Either.doneIf(f, value)`
-* `Either.throw(value)`
+* `Either.throw(value)` - this throws `Right(value)` not Error instnace !!! and then only .`catch()` handle the passed `Right`
 * `Either.throwIf(f, value)`
-* `Either.try(f)`
+* `Either.try(f)` 
 
 ### instance methods for Right
   * `.inspect(f)`
@@ -54,9 +54,12 @@ Introduce in [Medium post](https://medium.com/@andrwj/either-implementation-that
   * All methods work for Right only.
   * Only Right can `.throw()` or `.done()`
   * Basically Left will skip most methods except `inspect, tap, take, fold`
+	* `throw()` does not throw Error. It is deliver of `Right` to `.catch()`.
   * If you `throw()`, execution flow goes until find `.catch()`
   * If you `done()`, execution flow goes until find `.fold()` or `.take()`
   * If there is no exception in `try(f)`, return value will be of **Right**. If Exception occurs, then the return value will be of **Left**.
+	* If you do not want to get **Unhandled Promise Rejection Error** in `.try(f)`, you HAVE TO deal with its logic of `f` yourself. The unhandled error is not because of `.try()` but because of your misunderstanding of Promise chain.
+	* 
 
 ## Fromise (Experimental; Promimse + Either)
   * `Fromise.resolve (expr)`
@@ -81,6 +84,8 @@ Introduce in [Medium post](https://medium.com/@andrwj/either-implementation-that
  * `identity (v)` - returns `v`, always.
 
 ## Changes
+
+### `v0.2.4` (Published compiled source by Babel7)
 
 ### `v0.2.0` (break changes to version of `0.1.*` )
 * changed arguments order and way: `Either.of(f, value)` ➡ `Either.of(value, f)` - if `f` is not given, it just returns `Right(value)`. Otherwise, it returns `Right(value)` or `Left(value)` depends on the boolean result of `f(value)`
