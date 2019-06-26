@@ -1,8 +1,9 @@
 ## FPJS
 
-A simple package for learning functional programming.
+A Functional tool set for my own learning FP style. 
+Implemented by referring many other's source.
 
-Introduce in [Medium post](https://medium.com/@andrwj/either-implementation-that-is-throwable-and-catchable-5b0015f4b6e3)
+Introduced the beginning of this repository in [Medium post](https://medium.com/@andrwj/either-implementation-that-is-throwable-and-catchable-5b0015f4b6e3)
 
 
 ## Installation
@@ -14,7 +15,7 @@ Introduce in [Medium post](https://medium.com/@andrwj/either-implementation-that
 * In command line:
 `node -r esm --harmony ./index.js`
 
-* In ReactJS/VueJS: `import * as FP from '@andrwj/fp/FP'`
+* In ReactJS/VueJS/RunJS: `import * as FP from '@andrwj/fp'`
 
 ## Either
 ### static methods
