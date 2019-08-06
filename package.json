@@ -5,7 +5,8 @@
   "main": "index.js",
   "module": "FP.js",
   "scripts": {
-    "build": "npx babel --presets @babel/env --plugins @babel/plugin-transform-runtime ./*.js -d ./build"
+    "build": "npx babel --presets @babel/env --plugins @babel/plugin-transform-runtime ./*.js --ignore 'webpack.config.js' -d ./build",
+    "dist": "npx webpack --config webpack.config.js --env.NODE_ENV=production"
   },
   "repository": {
     "type": "git",
@@ -23,13 +24,35 @@
   "homepage": "https://github.com/andrwj/FPJS#readme",
   "dependencies": {
     "@babel/runtime": "^7.4.5",
+    "babel-loader": "^8.0.6",
+    "eslint": "^6.1.0",
     "esm": "^3.2.25",
-    "ramda": "^0.26.1"
+    "ramda": "^0.26.1",
+    "webpack": "^4.35.2",
+    "webpack-cli": "^3.3.6"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",
     "@babel/core": "^7.4.5",
     "@babel/plugin-transform-runtime": "^7.4.4",
-    "@babel/preset-env": "^7.4.5"
+    "@babel/preset-env": "^7.4.5",
+    "babel-eslint": "^10.0.2",
+    "eslint-config-airbnb": "^17.1.1",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-config-react-app": "^4.0.1",
+    "eslint-plugin-filenames": "^1.3.2",
+    "eslint-plugin-flowtype": "^3.13.0",
+    "eslint-plugin-html": "^6.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-lodash": "^5.1.0",
+    "eslint-plugin-node": "^9.1.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-react": "^7.14.3",
+    "eslint-plugin-react-hooks": "^1.6.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "terser-webpack-plugin": "^1.4.1",
+    "uglifyjs-webpack-plugin": "^2.2.0"
   }
 }

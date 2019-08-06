@@ -11,15 +11,10 @@ Introduced the beginning of this repository in [Medium post](https://medium.com/
 `npm install @andrwj/fp`
 
 
-## Usage (Not fully documented yet)
-* In command line:
-`node -r esm --harmony ./index.js`
-
-* In ReactJS/VueJS/RunJS: `import * as FP from '@andrwj/fp'`
 
 ## Either
 ### static methods
-* `Either.of(value, f)` - `f` is optional
+* `Either.of(value, f)`
 * `Either.fromNullable(value)`
 * `Either.filter(f, condition_f=truth)` - `condition_f` is optional
 * `Either.right(value)`
