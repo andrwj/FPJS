@@ -37,7 +37,7 @@ class Fromise extends Promise {
   }
 
   fold (f, g) {
-    return this.then( v0 => Either.is(v0) ? v0.fold(f, g) : v0 );
+    return this.then( v0 => Either.is(v0) ? v0.fold(f, g) : v0, e0 => Either.is(e0) ? e0.fold(f, g) : e0 );
   }
 
   chain (f) {

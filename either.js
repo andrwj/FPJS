@@ -91,6 +91,8 @@ Either.try = (f)  => {
   }
 };
 
+Either.is = (value) => (value instanceof Either);
+
 class Right extends Either {
 
   of (v, f, if_true=Either.right, if_false=Either.left) {
