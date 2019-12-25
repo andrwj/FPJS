@@ -1,28 +1,25 @@
-const Gates = {
-  NOT(a) { return !a; },
-  OR(a, b) { return a || b; },
-  AND(a, b) { return a && b; },
-  NAND(a, b) { return this.NOT(a && b); },
-  NOR(a, b) { return this.NOT(this.OR(a, b)); },
-  XOR(a, b) { return this.AND(this.NAND(a,b), this.OR(a,b)); },
-  XNOR(a, b) { return this.NOT(this.NOR(a, b)); }
-};
+export const NOT = (a) => !a;
+export const OR = (a, b) => a || b;
+export const AND = (a, b) => a && b;
+export const NAND = (a, b) => !AND(a, b);
+export const NOR = (a, b) => !OR(a, b);
+export const XOR = (a, b) => AND(NAND(a,b), OR(a,b));
+export const XNOR = (a, b) => !NOR(a, b);
 
+const logics = [NOT, OR, AND, NAND, NOR, XOR, XNOR];
 const varies = [ { a: 0, b: 0 }, { a: 0, b: 1 }, { a: 1,	b: 0 }, { a: 1,	b: 1 } ];
-
-export const Charts = Object.keys(Gates).map(gate => varies.map((test) => {
-  const result = (({ a, b }) => Gates[gate](a, b))(test);
+export const chart_dump = logics.map(gate => varies.map((test) => {
+  const result = (({ a, b }) => gate(a, b))(test);
   const desc = JSON.stringify(test)
-    .replace(/a":|b":/g, '')
-    .replace(/:|"|\{|\}/g, ' ')
-    .replace(/\s+/g, ' ')
-    .replace(/,/g, ' |')
-    .replace(/true/g, '1 ')
-    .replace(/false/g, '0 ');
-  return `${gate}:${desc} ➜ ${result ? 1 : 0}\n`;
+        .replace(/a":|b":/g, '')
+        .replace(/:|"|\{|\}/g, ' ')
+        .replace(/\s+/g, ' ')
+        .replace(/,/g, ' |')
+        .replace(/true/g, '1 ')
+        .replace(/false/g, '0 ');
+  return `${gate.name}:${desc} ➜ ${result ? 1 : 0}\n`;
 }).join('')).join('\n');
 
-export default Gates;
 
 /**
    NOT: 0 | 0  ➜ 1

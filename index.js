@@ -11,4 +11,4 @@ export { default as isFunction } from './isFunction.js';
 export { isFalsy, isNotFalsy } from './isFalsy.js';
 export { default as isFalse } from './isFalse.js';
 export { __true, __false } from './true-false.js';
-export { default as LogicGates, chart } from './logicGates.js';
+export { NOT, OR, AND, NAND, NOR, XOR, XNOR, chart_dump } from './logicGates.js';

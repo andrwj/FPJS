@@ -1,6 +1,6 @@
 ## FPJS
 
-A Functional tool set for my own learning FP style. 
+A Functional tool set for my own learning FP style.
 Implemented by referring many other's source.
 
 Introduced the beginning of this repository in [Medium post](https://medium.com/@andrwj/either-implementation-that-is-throwable-and-catchable-5b0015f4b6e3)
@@ -23,7 +23,7 @@ Introduced the beginning of this repository in [Medium post](https://medium.com/
 * `Either.doneIf(f, value)`
 * `Either.throw(value)` - this throws `Right(value)` not Error instnace !!! and then only .`catch()` handle the passed `Right`
 * `Either.throwIf(f, value)`
-* `Either.try(f)` 
+* `Either.try(f)`
 
 ### instance methods for Right
   * `.inspect(f)`
@@ -71,18 +71,22 @@ Introduced the beginning of this repository in [Medium post](https://medium.com/
 ## High Order Functions (Not fully documented yet)
  * `run(v, f1, f2, f3, ... ) : value`
  * `pipe(f1, f2, f3, ...) : function`
- 
+
 ## Utilities (Not fully documented yet)
  * `isFunction (v)` - return true if `v` is function
  * `isFalsy (v)` - true if `v` is one of `undefined`, `NaN`, `null`
  * `isFalse (v)` - true if `v` is one of `undefined`, `NaN`, `null`, `0`, `""`
  * `identity (v)` - returns `v`, always.
 
+## Logic Gates
+ * `import {NOT, OR, AND, NAND, NOR, XOR, XNOR, chart_dump} from FPJS;`
+
+
 ## Changes
 
 ### `v0.2.4` Published compiled source by Babel7
 
-### `v0.2.0` break changes to version of `0.1.*` 
+### `v0.2.0` break changes to version of `0.1.*`
 * changed arguments order and way: `Either.of(f, value)` ➡ `Either.of(value, f)` - if `f` is not given, it just returns `Right(value)`. Otherwise, it returns `Right(value)` or `Left(value)` depends on the boolean result of `f(value)`
 * changed arguments: `.catch(f, condition_f)` ➡ `.catch(f)` - if `f` is not given, it returns the instance of thrown from `.throw()`. Otherwise it returns `.map(f)`
 * added: `.of(value, f)` - same as `Either.of(value, f)`
