@@ -81,6 +81,17 @@ Introduced the beginning of this repository in [Medium post](https://medium.com/
 ## Logic Gates
  * `import {NOT, OR, AND, NAND, NOR, XOR, XNOR, chart_dump} from FPJS;`
 
+## Test Source Codes with RunJS
+
+
+```
+// use loader.js for local developing
+// for example:
+import {Either} from '/Users/andrwj/Develops/FPJS/FPJS/loader';
+
+
+```
+
 
 ## Changes
 
