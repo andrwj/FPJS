@@ -61,14 +61,14 @@ Either.of = (v, f, if_true=Either.right, if_false=Either.left) => {
 
 Either.fromNullable = v => Either.of(v, truth);
 
-Either.filter = (f, judge=truth, if_true=Either.right, if_false=Either.false) => {
-  const v = f();
-  return judge(v) ? if_true(v) : if_false(v);
-};
-
 Either.right = R.curry( v => new Right(v) );
 
 Either.left = R.curry( v => new Left(v) );
+
+Either.filter = (f, judge=truth, if_true=Either.right, if_false=Either.left) => {
+  const v = f();
+  return judge(v) ? if_true(v) : if_false(v);
+};
 
 /* only '.take()' or '.fold()' handles instance of 'Done' */
 Either.done = (v, functor=Either.right) => new Done( functor(v) );
