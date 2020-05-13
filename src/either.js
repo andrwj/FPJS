@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import curry from './curry';
 import isFunction from './isFunction';
 
 export const identity = v => v;
@@ -61,9 +61,9 @@ Either.of = (v, f, if_true=Either.right, if_false=Either.left) => {
 
 Either.fromNullable = v => Either.of(v, truth);
 
-Either.right = R.curry( v => new Right(v) );
+Either.right = curry( v => new Right(v) );
 
-Either.left = R.curry( v => new Left(v) );
+Either.left = curry( v => new Left(v) );
 
 Either.filter = (f, judge=truth, if_true=Either.right, if_false=Either.left) => {
   const v = f();
@@ -91,7 +91,7 @@ Either.try = (f)  => {
   }
 };
 
-Either.is = (value) => (value instanceof Either);
+Either.is = value => (value instanceof Either);
 
 class Right extends Either {
 
