@@ -9,12 +9,7 @@ export default (function () {
       numArgs = numArgs || fn.length;
       return function curried() {
          if (arguments.length < numArgs) {
-            return numArgs - arguments.length > 0
-               ? curryN(
-                    _curry1.apply(this, [fn].concat(Array.from(arguments))),
-                    numArgs - arguments.length
-                 )
-               : _curry1.apply(this, [fn].concat(Array.from(arguments)));
+            return numArgs - arguments.length > 0 ? curryN(_curry1.apply(this, [fn].concat(Array.from(arguments))), numArgs - arguments.length) : _curry1.apply(this, [fn].concat(Array.from(arguments)));
          }
          return fn.apply(this, arguments);
       };

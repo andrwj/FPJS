@@ -14,7 +14,7 @@ export class Maybe {
    }
 
    static fromNullable(v) {
-      return [null, undefined].some((_) => Object.is(v, _))
+      return [null, undefined].some(_ => Object.is(v, _))
          ? Maybe.nothing(v)
          : Maybe.just(v);
    }
@@ -33,9 +33,6 @@ export class Maybe {
 }
 
 export class Just extends Maybe {
-   constructor(v) {
-      super(v);
-   }
 
    get value() {
       return this._value;
@@ -63,9 +60,6 @@ export class Just extends Maybe {
 }
 
 export class Nothing extends Maybe {
-   constructor(v) {
-      super(v);
-   }
 
    map(f) {
       return this;

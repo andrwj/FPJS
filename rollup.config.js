@@ -1,8 +1,4 @@
-import { terser } from 'rollup-plugin-terser';
-
-const terser_options = {
-  module: true
-};
+var babel = require("rollup-plugin-babel");
 
 export default [{
   input: './src/index.js',
@@ -28,6 +24,9 @@ export default [{
 	 	sourcemap: true
     }],
   plugins:[
-    /* terser() */
+		babel({ 
+			runtimeHelpers: true,
+			exclude: 'node_modules/**'
+		})
   ]
 }];

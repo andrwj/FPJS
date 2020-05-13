@@ -9,3 +9,4 @@ package-lock.json
 Makefile
 .tern-port
 .log/
+yarn.lock

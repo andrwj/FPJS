@@ -1,4 +1,4 @@
-export const NOT = (a) => !a;
+export const NOT = a => !a;
 export const OR = (a, b) => a || b;
 export const AND = (a, b) => a && b;
 export const NAND = (a, b) => !AND(a, b);
@@ -9,16 +9,16 @@ export const XNOR = (a, b) => !NOR(a, b);
 const logics = [NOT, OR, AND, NAND, NOR, XOR, XNOR];
 const varies = [ { a: 0, b: 0 }, { a: 0, b: 1 }, { a: 1,	b: 0 }, { a: 1,	b: 1 } ];
 export const chart_dump = logics.map(gate => varies.map((test) => {
-  const result = (({ a, b }) => gate(a, b))(test);
-  const desc = JSON.stringify(test)
-        .replace(/a":|b":/g, '')
-        .replace(/:|"|\{|\}/g, ' ')
-        .replace(/\s+/g, ' ')
-        .replace(/,/g, ' |')
-        .replace(/true/g, '1 ')
-        .replace(/false/g, '0 ');
-  return `${gate.name}:${desc} ➜ ${result ? 1 : 0}\n`;
-}).join('')).join('\n');
+   const result = (({ a, b }) => gate(a, b))(test);
+   const desc = JSON.stringify(test)
+         .replace(/a":|b":/g, "")
+         .replace(/:|"|\{|\}/g, " ")
+         .replace(/\s+/g, " ")
+         .replace(/,/g, " |")
+         .replace(/true/g, "1 ")
+         .replace(/false/g, "0 ");
+   return `${gate.name}:${desc} ➜ ${result ? 1 : 0}\n`;
+}).join("")).join("\n");
 
 
 /**
